@@ -1,0 +1,15 @@
+{
+    "name": "noam/pokemon-api",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Noam",
+            "email": "ntaub2@gmail.com"
+        }
+    ],
+    "require": {}
+}
