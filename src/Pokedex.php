@@ -4,15 +4,27 @@ namespace App;
 
 class Pokedex
 {
+
     public static function getRandomPokemons($amount = 5)
     {
         $pokedex = self::getPokedex();
-        $randomKeys = array_rand($pokedex, $amount);
-        $randomItems = [];
-        foreach ($randomKeys as $key) {
-            $randomItems[] = $pokedex[$key];
+
+        if (isset($_COOKIE['pokemonData']) ) {
+            $prevPokemons = json_decode($_COOKIE['pokemonData'], true);
+            $pokedex = array_filter($pokedex, function ($elem) use ($prevPokemons) {
+                return !in_array($elem, $prevPokemons);
+            });
         }
-        return $randomItems;
+        $randomPokemons = [];
+        $randomKeys = array_rand($pokedex, $amount);
+        foreach ($randomKeys as $key) {
+            $randomPokemons[] = $pokedex[$key];
+        }
+
+        usort($randomPokemons, function ($a, $b) {
+            return strcmp($a['name']['english'], $b['name']['english']);
+        });
+        return $randomPokemons;
     }
 
     private static function getPokedex()
@@ -24,9 +36,9 @@ class Pokedex
     public static function getPokemonByID($id)
     {
         $pokedex = self::getPokedex();
-        $id = (int) $id;
+        $id = (int)$id;
         foreach ($pokedex as $pokemon) {
-            if($pokemon['id'] === $id){
+            if ($pokemon['id'] === $id) {
                 return $pokemon;
             }
         }
@@ -34,3 +46,5 @@ class Pokedex
     }
 
 }
+
+
